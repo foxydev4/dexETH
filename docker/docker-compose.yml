@@ -1,0 +1,32 @@
+version: '3.9'
+
+services:
+  database:
+    image: postgres:16
+    restart: always
+    container_name: boardfi-db
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: boardfi
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    image: boardfi-api:latest
+    restart: always
+    container_name: boardfi-api
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://database:5432/boardfi
+      DB_USERNAME: postgres
+      DB_PASSWORD: password
+    depends_on:
+      - database
+    env_file: ./secrets.env
+
+volumes:
+  postgres_data:

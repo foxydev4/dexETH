@@ -1,0 +1,44 @@
+query FetchSwapsV3($from: BigInt!, $till: BigInt!) {
+    swaps(
+        first: 1000
+        orderBy: timestamp
+        orderDirection: desc
+        where: {
+            timestamp_gte: $from
+            timestamp_lte: $till
+        }
+    ) {
+        id
+        amountUSD
+        transaction {
+            id
+        }
+        amount1
+        amount0
+        pool {
+            id
+            token0 {
+                id
+                name
+                decimals
+                volumeUSD
+                tokenDayData(first: 1, orderBy: date, orderDirection: desc) {
+                    priceUSD
+                    totalValueLockedUSD
+                    volumeUSD
+                }
+            }
+            token1 {
+                id
+                name
+                decimals
+                volumeUSD
+                tokenDayData(first: 1, orderBy: date, orderDirection: desc) {
+                    priceUSD
+                    totalValueLockedUSD
+                    volumeUSD
+                }
+            }
+        }
+    }
+}
